@@ -1,0 +1,45 @@
+services:
+  # MongoDB for all services (each can use its own db)
+  mongodb:
+    image: mongo:6
+    container_name: mongo_container
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # User Service
+  user-service:
+    build: ./services/user-service
+    container_name: user_service
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./services/user-service/.env
+    depends_on:
+      - mongodb
+
+  # Order Service (empty for now)
+  order-service:
+    build: ./services/order-service
+    container_name: order_service
+    ports:
+      - "5002:5002"
+    env_file:
+      - ./services/order-service/.env
+    depends_on:
+      - mongodb
+
+  # Product Service (empty for now)
+  product-service:
+    build: ./services/product-service
+    container_name: product_service
+    ports:
+      - "5003:5003"
+    env_file:
+      - ./services/product-service/.env
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:
