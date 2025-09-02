@@ -20,7 +20,9 @@ const userSchema = new mongoose.Schema(
       enum: ["Active", "Inactive"],
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 const userModel = mongoose.model("user", userSchema);

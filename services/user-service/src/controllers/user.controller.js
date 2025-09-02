@@ -10,7 +10,7 @@ const createUser = async (req, res) => {
     if (validate !== true) throw new Error(validate.message);
 
     //conditions
-    const userExist = await userModel.findOne({ email: email });
+    const userExist = await userModel.findOne({ email: email }).select('email');
     if (userExist) {
       return __._error({
         code: http_codes.badRequest,
@@ -73,6 +73,16 @@ const getUserList = async (req, res) => {
       },
       {
         $limit: perPage,
+      },
+      {
+        $project: {
+          _id: 0,
+          userId: "$_id",
+          name: 1,
+          email: 1,
+          status: 1,
+          createdAt: 1,
+        },
       },
     ];
     const usersList = await userModel.aggregate(agg);
