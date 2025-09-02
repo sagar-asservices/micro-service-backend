@@ -97,11 +97,8 @@ const login = async (req, res) => {
 
 const profile = async (req, res) => {
   try {
-    const { user_id } = req.headers;
-    if (!user_id) {
-      return __._error({ code: badRequest, message: messages.userUnauthorized, res });
-    }
-    const user = await userModel.findOne({ _id: new mongoose.Types.ObjectId(user_id) });
+    const userId = req.userId;
+    const user = await userModel.findOne({ _id: new mongoose.Types.ObjectId(userId) });
     const response = {
       userId: user._id,
       name: user.name,
@@ -112,6 +109,13 @@ const profile = async (req, res) => {
     return __._success({ code: http_codes.created, message: messages.fetched, data: response, res });
   } catch (err) {
     console.log(err);
+    return __._error({
+      code: http_codes.internalError,
+      message: err.message || messages.internalError,
+      res,
+      error: err.message,
+      method: "profile"
+    });
   }
 };
 

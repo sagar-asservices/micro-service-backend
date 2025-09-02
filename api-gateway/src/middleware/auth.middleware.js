@@ -1,5 +1,7 @@
 import { _success, _error } from "../common/common.js";
 import jwt from "jsonwebtoken";
+dotenv.config();
+import dotenv from "dotenv"
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const authUser = async (req, res, next) => {
@@ -8,7 +10,8 @@ const authUser = async (req, res, next) => {
     if (!auth || !auth.startsWith("Bearer ")) return next(); // allow open endpoints
     const token = auth.split(" ")[1];
     try {
-      const payload = jwt.decode(token, JWT_SECRET);
+      console.log(JWT_SECRET, ":::::::::::::::::")
+      const payload = jwt.verify(token, JWT_SECRET);
       // attach minimal identity info as headers so services can use them
       req.headers["user_id"] = payload.userId;
       req.headers["user_email"] = payload.email;
