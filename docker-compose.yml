@@ -19,27 +19,38 @@ services:
     depends_on:
       - mongodb
 
-  # Order Service (empty for now)
+  # Product Service
+  product-service:
+    build: ./services/product-service
+    container_name: product_service
+    ports:
+      - "5002:5002"
+    env_file:
+      - ./services/product-service/.env
+    depends_on:
+      - mongodb
+
+  # Order Service
   order-service:
     build: ./services/order-service
     container_name: order_service
     ports:
-      - "5002:5002"
+      - "5003:5003"
     env_file:
       - ./services/order-service/.env
     depends_on:
       - mongodb
 
-  # Product Service (empty for now)
-  product-service:
-    build: ./services/product-service
-    container_name: product_service
+  # API Gateway
+  api_gateway:
+    build: ./api-gateway
+    container_name: api_gateway
     ports:
-      - "5003:5003"
-    env_file:
-      - ./services/product-service/.env
+      - "5000:5000"
     depends_on:
-      - mongodb
+      - user-service
+      - order-service
+      - product-service
 
 volumes:
   mongo_data:

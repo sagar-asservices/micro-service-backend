@@ -1,11 +1,14 @@
 # Ignore all node_modules in every service
 services/*/node_modules/
+api-gateway/node_modules/
 
 # Ignore all .env files in every service
 services/*/.env
+api-gateway/.env
 
 # Ignore package-lock.json in every service
 services/*/package-lock.json
+api-gateway/package-lock.json
 
 # (Optional) Also ignore Docker-related stuff if needed
 # *.log

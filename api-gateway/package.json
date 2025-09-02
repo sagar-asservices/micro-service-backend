@@ -1,25 +1,24 @@
 {
-  "name": "user-service",
+  "name": "api-gateway",
   "version": "1.0.0",
-  "type": "module",
-  "description": "",
+  "description": "api gateway code - manage all services",
   "license": "ISC",
   "author": "sagar",
+  "type": "module",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
   },
   "dependencies": {
-    "bcryptjs": "^3.0.2",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "dotenv": "^16.6.1",
-    "express": "^4.21.2",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
     "helmet": "^8.1.0",
+    "http-proxy-middleware": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.8.7",
     "morgan": "^1.10.1"
   },
   "devDependencies": {

@@ -10,8 +10,7 @@ import orderRoutes from "./routes/order.routes.js";
 import connectDB from "./common/db.js";
 import common from "./common/common.js";
 
-dotenv.config();
-const PORT = process.env.PORT || 5002;
+const PORT = process.env.PORT || 5003;
 global.__ = common;
 
 const app = express();
@@ -35,7 +34,7 @@ app.use(morgan("dev"));
 app.use(
   compression({
     level: 6,
-    threshold: 1024,
+    threshold: 1024
   })
 );
 
@@ -44,7 +43,7 @@ app.use(
   express.static("public", {
     maxAge: "365d",
     etag: true,
-    lastModified: true,
+    lastModified: true
   })
 );
 
@@ -52,7 +51,7 @@ app.use(
 connectDB();
 
 // Routes
-app.use("/api/v1/order", orderRoutes);
+app.use("/api/v1", orderRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

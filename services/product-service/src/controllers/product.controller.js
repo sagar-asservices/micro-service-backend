@@ -13,11 +13,7 @@ const createProduct = async (req, res) => {
     // condition
     const existSku = await productModel.findOne({ sku: sku }).select("sku");
     if (existSku) {
-      return __._error({
-        code: http_codes.badRequest,
-        message: messages.skuAlreadyExist,
-        res,
-      });
+      return __._error({code: http_codes.badRequest,message: messages.skuAlreadyExist,res});
     }
     // store user and give response
     let productObj = {
@@ -25,7 +21,7 @@ const createProduct = async (req, res) => {
       name,
       description,
       price: parseInt(price),
-      stock: parseInt(stock),
+      stock: parseInt(stock)
     };
     const product = new productModel(productObj);
     await product.save();
@@ -38,15 +34,10 @@ const createProduct = async (req, res) => {
       price: product.price,
       stock: product.stock,
       status: product.status,
-      createdAt: product.createdAt,
+      createdAt: product.createdAt
     };
 
-    return __._success({
-      code: http_codes.created,
-      message: messages.productCreated,
-      data: response,
-      res,
-    });
+    return __._success({ code: http_codes.created, message: messages.productCreated, data: response, res });
   } catch (err) {
     console.log(err);
     return __._error({
@@ -54,7 +45,7 @@ const createProduct = async (req, res) => {
       message: messages.internalError,
       res,
       error: err.message,
-      method: "createProduct",
+      method: "createProduct"
     });
   }
 };
@@ -68,23 +59,23 @@ const getProductList = async (req, res) => {
     const skip = (currentPage - 1) * perPage;
 
     let wh = {
-      status: "Active",
+      status: "Active"
     };
 
     const agg = [
       {
-        $match: wh,
+        $match: wh
       },
       {
         $sort: {
-          createdAt: -1,
-        },
+          createdAt: -1
+        }
       },
       {
-        $skip: skip,
+        $skip: skip
       },
       {
-        $limit: perPage,
+        $limit: perPage
       },
       {
         $project: {
@@ -94,9 +85,9 @@ const getProductList = async (req, res) => {
           description: 1,
           price: 1,
           stock: 1,
-          _id: 0,
-        },
-      },
+          _id: 0
+        }
+      }
     ];
     const productList = await productModel.aggregate(agg);
     const totalProduct = await productModel.countDocuments(wh);
@@ -107,12 +98,7 @@ const getProductList = async (req, res) => {
     data["currentPage"] = currentPage;
     data["totalPage"] = Math.ceil(totalProduct / perPage);
 
-    return __._success({
-      code: http_codes.ok,
-      message: messages.fetched,
-      data,
-      res,
-    });
+    return __._success({ code: http_codes.ok, message: messages.fetched, data, res });
   } catch (err) {
     console.log(err);
     return __._error({
@@ -120,7 +106,7 @@ const getProductList = async (req, res) => {
       message: messages.internalError,
       res,
       error: err.message,
-      method: "createProduct",
+      method: "createProduct"
     });
   }
 };
@@ -129,11 +115,7 @@ const productDetail = async (req, res) => {
   try {
     const { productId } = req.query;
     if (!productId) {
-      return __._error({
-        code: http_codes.badRequest,
-        message: messages.productIdRequired,
-        res,
-      });
+      return __._error({code: http_codes.badRequest,message: messages.productIdRequired,res});
     }
     let product = await productModel
       .findOne({ _id: new mongoose.Types.ObjectId(productId) })
@@ -141,22 +123,13 @@ const productDetail = async (req, res) => {
       .lean();
 
     if (!product) {
-      return __._error({
-        code: http_codes.badRequest,
-        message: messages.productNotFound,
-        res,
-      });
+      return __._error({code: http_codes.badRequest,message: messages.productNotFound,res});
     }
 
     product["productId"] = product._id;
     delete product._id;
 
-    return __._success({
-      code: http_codes.ok,
-      message: messages.fetched,
-      data: product,
-      res,
-    });
+    return __._success({ code: http_codes.ok, message: messages.fetched, data: product, res });
   } catch (err) {
     console.log(err);
     return __._error({
@@ -164,7 +137,7 @@ const productDetail = async (req, res) => {
       message: messages.internalError,
       res,
       error: err.message,
-      method: "productDetail",
+      method: "productDetail"
     });
   }
 };
@@ -172,5 +145,5 @@ const productDetail = async (req, res) => {
 export default {
   createProduct,
   getProductList,
-  productDetail,
+  productDetail
 };

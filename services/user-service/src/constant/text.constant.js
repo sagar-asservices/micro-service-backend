@@ -23,7 +23,12 @@ export const messages = {
   authorizationHeaderRequired: "Authorization Header Required",
   invalidTokenFormat: "Invalid Token Format",
   tokenCannotBeEmpty: "Token can not be empty",
-  emailAlreadyExist: "Email already exist, please try another one."
+  emailAlreadyExist: "Email already exist, please try another one.",
+  userNotFound: "User not found",
+  invalidPassword: "Invalid Password!",
+  userCreated: "User register successfully",
+  loginSuccess: "User login successfully",
+  userUnauthorized: "User Unauthorized"
 };
 
 export const schemas = {

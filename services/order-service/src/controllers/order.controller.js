@@ -13,7 +13,7 @@ const createOrder = async (req, res) => {
     let orderObj = {
       userId,
       productId,
-      quantity,
+      quantity
     };
     let order = new orderModel(orderObj);
     await order.save();
@@ -25,15 +25,10 @@ const createOrder = async (req, res) => {
       status: order.status,
       orderId: order._id,
       createdAt: order.createdAt,
-      updatedAt: order.updatedAt,
+      updatedAt: order.updatedAt
     };
 
-    return __._success({
-      code: http_codes.created,
-      message: messages.orderCreated,
-      data: response,
-      res,
-    });
+    return __._success({ code: http_codes.created, message: messages.orderCreated, data: response, res });
   } catch (err) {
     console.log(err);
     return __._error({
@@ -41,7 +36,7 @@ const createOrder = async (req, res) => {
       message: err.message || messages.internalError,
       res,
       error: err.message,
-      method: "createOrder",
+      method: "createOrder"
     });
   }
 };
@@ -55,28 +50,24 @@ const myOrderList = async (req, res) => {
     const skip = (currentPage - 1) * perPage;
 
     if (!userId) {
-      return __._error({
-        code: http_codes.badRequest,
-        message: messages.userIdRequired,
-        res,
-      });
+      return __._error({ code: http_codes.badRequest, message: messages.userIdRequired, res });
     }
     let wh = { userId: new mongoose.Types.ObjectId(userId) };
     console.log(wh);
     const agg = [
       {
-        $match: wh,
+        $match: wh
       },
       {
         $sort: {
-          createdAt: -1,
-        },
+          createdAt: -1
+        }
       },
       {
-        $skip: skip,
+        $skip: skip
       },
       {
-        $limit: perPage,
+        $limit: perPage
       },
       {
         $project: {
@@ -86,9 +77,9 @@ const myOrderList = async (req, res) => {
           quantity: 1,
           orderId: "$_id",
           status: 1,
-          createdAt: 1,
-        },
-      },
+          createdAt: 1
+        }
+      }
     ];
 
     const orderList = await orderModel.aggregate(agg);
@@ -100,12 +91,7 @@ const myOrderList = async (req, res) => {
     data["currentPage"] = currentPage;
     data["totalPage"] = Math.ceil(totalOrder / perPage);
 
-    return __._success({
-      code: http_codes.ok,
-      message: messages.fetched,
-      data,
-      res,
-    });
+    return __._success({ code: http_codes.ok, message: messages.fetched, data, res });
   } catch (err) {
     console.log(err);
     return __._error({
@@ -113,12 +99,12 @@ const myOrderList = async (req, res) => {
       message: err.message || messages.internalError,
       res,
       error: err.message,
-      method: "myOrderList",
+      method: "myOrderList"
     });
   }
 };
 
 export default {
   createOrder,
-  myOrderList,
+  myOrderList
 };
