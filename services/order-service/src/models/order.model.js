@@ -5,24 +5,24 @@ const orderSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "user",
+      ref: "user"
     },
     productId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: true
     },
     quantity: {
       type: Number,
-      required: true,
+      required: true
     },
     status: {
       type: String,
       enum: ["Pending", "Confirmed", "Cancelled"],
-      default: "Pending",
-    },
+      default: "Pending"
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 

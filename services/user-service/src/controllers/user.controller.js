@@ -97,7 +97,9 @@ const login = async (req, res) => {
 
 const profile = async (req, res) => {
   try {
-    const userId = req.userId;
+    // const userId = req.userId;
+    const userId = "68b6d4a5ca3841e3e226b893";
+    console.log("Profile_userId::::", userId);
     const user = await userModel.findOne({ _id: new mongoose.Types.ObjectId(userId) });
     const response = {
       userId: user._id,
@@ -115,6 +117,27 @@ const profile = async (req, res) => {
       res,
       error: err.message,
       method: "profile"
+    });
+  }
+};
+
+const verifyUser = async (req, res) => {
+  try {
+    const user = await userModel.findById(new mongoose.Types.ObjectId(req.query.userId));
+    let isUserExist = false;
+    if (user) {
+      isUserExist = true;
+    }
+    console.log("isUserExist", isUserExist);
+    return __._success({ code: http_codes.ok, messages: messages.fetched, data: { isUserExist }, res });
+  } catch (err) {
+    console.log(err);
+    return __._error({
+      code: http_codes.internalError,
+      message: err.message || messages.internalError,
+      res,
+      error: err.message,
+      method: "verifyUser"
     });
   }
 };
@@ -183,5 +206,6 @@ export default {
   register,
   login,
   profile,
-  getUserList
+  getUserList,
+  verifyUser
 };

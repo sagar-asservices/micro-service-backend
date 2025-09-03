@@ -1,7 +1,8 @@
 import { _success, _error } from "../common/common.js";
 import jwt from "jsonwebtoken";
 dotenv.config();
-import dotenv from "dotenv"
+import dotenv from "dotenv";
+import axios from "axios";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const authUser = async (req, res, next) => {
@@ -10,8 +11,21 @@ const authUser = async (req, res, next) => {
     if (!auth || !auth.startsWith("Bearer ")) return next(); // allow open endpoints
     const token = auth.split(" ")[1];
     try {
-      console.log(JWT_SECRET, ":::::::::::::::::")
       const payload = jwt.verify(token, JWT_SECRET);
+
+      try {
+        const response = await axios.get(`http://user_service:5001/api/v1/verifyuser?userId=${payload.userId}`);
+        if (response.data.isUserExist === false) return _error({ code: 401, message: "Invalid User", res });
+      } catch (err) {
+        return _error({
+          code: 500,
+          message: "User-service unavailable",
+          res,
+          error: err.message,
+          method: "authUser-verifyUser"
+        });
+      }
+
       // attach minimal identity info as headers so services can use them
       req.headers["user_id"] = payload.userId;
       req.headers["user_email"] = payload.email;

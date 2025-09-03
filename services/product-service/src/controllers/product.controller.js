@@ -13,7 +13,7 @@ const createProduct = async (req, res) => {
     // condition
     const existSku = await productModel.findOne({ sku: sku }).select("sku");
     if (existSku) {
-      return __._error({code: http_codes.badRequest,message: messages.skuAlreadyExist,res});
+      return __._error({ code: http_codes.badRequest, message: messages.skuAlreadyExist, res });
     }
     // store user and give response
     let productObj = {
@@ -115,7 +115,7 @@ const productDetail = async (req, res) => {
   try {
     const { productId } = req.query;
     if (!productId) {
-      return __._error({code: http_codes.badRequest,message: messages.productIdRequired,res});
+      return __._error({ code: http_codes.badRequest, message: messages.productIdRequired, res });
     }
     let product = await productModel
       .findOne({ _id: new mongoose.Types.ObjectId(productId) })
@@ -123,7 +123,7 @@ const productDetail = async (req, res) => {
       .lean();
 
     if (!product) {
-      return __._error({code: http_codes.badRequest,message: messages.productNotFound,res});
+      return __._error({ code: http_codes.badRequest, message: messages.productNotFound, res });
     }
 
     product["productId"] = product._id;

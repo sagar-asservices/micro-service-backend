@@ -6,7 +6,7 @@ export const http_codes = {
   ok: 200,
   notImplemented: 501,
   forbidden: 403,
-  unAuthorized: 401,
+  unAuthorized: 401
 };
 
 export const messages = {
@@ -29,5 +29,5 @@ export const messages = {
 };
 
 export const schemas = {
-  user: "user",
+  user: "user"
 };

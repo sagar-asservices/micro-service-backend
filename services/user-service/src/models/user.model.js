@@ -5,24 +5,24 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: true
     },
     email: {
       type: String,
-      unique: true,
+      unique: true
     },
     password: {
       type: String,
-      required: true,
+      required: true
     },
     status: {
       type: String,
       default: "Active",
-      enum: ["Active", "Inactive"],
-    },
+      enum: ["Active", "Inactive"]
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 

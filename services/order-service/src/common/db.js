@@ -6,7 +6,7 @@ const connectDB = async () => {
 
     const options = {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
+      useUnifiedTopology: true
     };
 
     await mongoose.connect(process.env.MONGO_URI, options);

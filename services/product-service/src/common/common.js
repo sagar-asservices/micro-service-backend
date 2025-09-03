@@ -4,7 +4,7 @@ export default {
       code: code,
       message: message,
       data: data,
-      ...extra,
+      ...extra
     });
   },
 
@@ -13,8 +13,8 @@ export default {
       code: code,
       error: {
         message: message,
-        extra,
-      },
+        extra
+      }
     };
     if (process.env.DEBUG === "true") {
       errResp.error.stack = error?.stack;
@@ -28,7 +28,7 @@ export default {
       if (Object.keys(body).indexOf(required[i]) === -1) {
         return {
           is_valid: false,
-          message: required[i] + " is required.",
+          message: required[i] + " is required."
         };
       }
     }
@@ -38,25 +38,17 @@ export default {
       if (body[field] == null) {
         body[field] = "";
       }
-      if (
-        body[field].toString().trim() == "" &&
-        field !== "image" &&
-        required.indexOf(field) !== -1
-      ) {
+      if (body[field].toString().trim() == "" && field !== "image" && required.indexOf(field) !== -1) {
         return {
           is_valid: false,
-          message: field + " is required.",
+          message: field + " is required."
         };
       }
 
-      if (
-        field == "email" &&
-        required.indexOf(field) !== -1 &&
-        !this._validateEmail(body[field].toString().trim())
-      ) {
+      if (field == "email" && required.indexOf(field) !== -1 && !this._validateEmail(body[field].toString().trim())) {
         return {
           is_valid: false,
-          message: "Please enter valid email address.",
+          message: "Please enter valid email address."
         };
       }
     }
@@ -67,5 +59,5 @@ export default {
     var re =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
-  },
+  }
 };
