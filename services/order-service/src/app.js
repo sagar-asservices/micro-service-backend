@@ -9,6 +9,8 @@ import compression from "compression";
 import orderRoutes from "./routes/order.routes.js";
 import connectDB from "./common/db.js";
 import common from "./common/common.js";
+import { connect } from "./messaging/rabbit.js";
+import { initInventoryUpdateConsumer } from "./messaging/workers/inventoryUpdateConsumer.js";
 
 const PORT = process.env.PORT || 5003;
 global.__ = common;
@@ -52,6 +54,14 @@ connectDB();
 
 // Routes
 app.use("/api/v1", orderRoutes);
+
+async function start() {
+  await connect(); // connect to rabbit
+  if (process.env.SERVICE_NAME === "order-service") {
+    await initInventoryUpdateConsumer();
+  }
+}
+start();
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

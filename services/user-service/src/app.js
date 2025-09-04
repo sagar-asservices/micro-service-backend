@@ -9,6 +9,7 @@ import compression from "compression";
 import userRoutes from "./routes/user.routes.js";
 import connectDB from "./common/db.js";
 import common from "./common/common.js";
+import { connect } from "./messaging/rabbit.js";
 
 const PORT = process.env.PORT || 5001;
 global.__ = common;
@@ -53,6 +54,14 @@ connectDB();
 // Routes
 app.use("/api/v1", userRoutes);
 
+async function start() {
+  await connect();              // connect to rabbit
+  if (process.env.SERVICE_NAME === 'product-service') {
+    await initOrderCreatedConsumer();
+  }
+}
+start();
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Something went wrong!" });
@@ -60,8 +69,8 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, (err) => {
   if (err) {
-    console.debug("Error while start server");
+    console.log("Error while start server");
     return;
   }
-  console.debug(`Server running on : http://localhost:${PORT}`);
+  console.log(`Server running on : http://localhost:${PORT}`);
 });

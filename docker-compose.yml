@@ -7,6 +7,23 @@ services:
       - "27018:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - ms-network
+
+  # rabbitmq:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672" # management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - ms-network
 
   # User Service
   user-service:
@@ -18,6 +35,9 @@ services:
       - ./services/user-service/.env
     depends_on:
       - mongodb
+      - rabbitmq
+    networks:
+      - ms-network
 
   # Product Service
   product-service:
@@ -29,6 +49,9 @@ services:
       - ./services/product-service/.env
     depends_on:
       - mongodb
+      - rabbitmq
+    networks:
+      - ms-network
 
   # Order Service
   order-service:
@@ -40,6 +63,9 @@ services:
       - ./services/order-service/.env
     depends_on:
       - mongodb
+      - rabbitmq
+    networks:
+      - ms-network
 
   # API Gateway
   api_gateway:
@@ -51,6 +77,14 @@ services:
       - user-service
       - order-service
       - product-service
+      - rabbitmq
+    networks:
+      - ms-network
 
 volumes:
   mongo_data:
+  rabbitmq-data:
+
+networks:
+  ms-network:
+    driver: bridge

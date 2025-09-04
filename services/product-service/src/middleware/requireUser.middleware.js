@@ -1,3 +1,5 @@
+import { http_codes, messages } from "../constant/text.constant.js";
+
 const requireUser = async (req, res, next) => {
   try {
     const userId = req.headers["user_id"];
@@ -5,9 +7,10 @@ const requireUser = async (req, res, next) => {
     req.userId = userId;
     next();
   } catch (err) {
+    console.log(err)
     return _error({
-      code: 500,
-      message: "Internal Server Error",
+      code: http_codes.internalError,
+      message: messages.internalError,
       res,
       error: err.message,
       method: "AuthToken"

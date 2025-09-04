@@ -82,7 +82,6 @@ const login = async (req, res) => {
     };
     return __._success({ code: http_codes.created, message: messages.loginSuccess, data: response, res });
   } catch (err) {
-    console.log(err);
     // error catch
     console.log(err);
     return __._error({
@@ -97,17 +96,17 @@ const login = async (req, res) => {
 
 const profile = async (req, res) => {
   try {
-    // const userId = req.userId;
-    const userId = "68b6d4a5ca3841e3e226b893";
-    console.log("Profile_userId::::", userId);
+    const userId = req.userId;
     const user = await userModel.findOne({ _id: new mongoose.Types.ObjectId(userId) });
+
     const response = {
-      userId: user._id,
+      userId: userId,
       name: user.name,
       email: user.email,
       status: user.status,
       createdAt: user.createdAt
     };
+
     return __._success({ code: http_codes.created, message: messages.fetched, data: response, res });
   } catch (err) {
     console.log(err);
@@ -128,7 +127,7 @@ const verifyUser = async (req, res) => {
     if (user) {
       isUserExist = true;
     }
-    console.log("isUserExist", isUserExist);
+
     return __._success({ code: http_codes.ok, messages: messages.fetched, data: { isUserExist }, res });
   } catch (err) {
     console.log(err);

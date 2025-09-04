@@ -9,6 +9,8 @@ import compression from "compression";
 import productRoutes from "./routes/product.routes.js";
 import connectDB from "./common/db.js";
 import common from "./common/common.js";
+import { connect } from "./messaging/rabbit.js";
+import { initOrderCreatedConsumer } from "./messaging/workers/orderCreatedConsumer.js";
 
 const PORT = process.env.PORT || 5002;
 global.__ = common;
@@ -52,6 +54,14 @@ connectDB();
 
 // Routes
 app.use("/api/v1", productRoutes);
+
+async function start() {
+  await connect();              // connect to rabbit
+  if (process.env.SERVICE_NAME === 'product-service') {
+    await initOrderCreatedConsumer();
+  }
+}
+start();
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
