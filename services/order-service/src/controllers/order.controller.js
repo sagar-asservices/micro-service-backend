@@ -1,10 +1,13 @@
 import orderModel from "../models/order.model.js";
 import { http_codes, messages } from "../constant/text.constant.js";
 import mongoose from "mongoose";
+import { publish } from "../messaging/publisher.js";
 
 const createOrder = async (req, res) => {
   try {
-    const { userId, productId, quantity } = req.body;
+    const userId = req.userId;
+    const { productId, quantity, price } = req.body;
+
     const required = ["userId", "productId", "quantity"];
     const validate = __._checkFields(req.body, required);
     if (validate !== true) throw new Error(validate.message);
@@ -13,7 +16,8 @@ const createOrder = async (req, res) => {
     let orderObj = {
       userId,
       productId,
-      quantity
+      quantity,
+      price: quantity * price
     };
     let order = new orderModel(orderObj);
     await order.save();
@@ -21,13 +25,15 @@ const createOrder = async (req, res) => {
     const response = {
       userId: userId,
       productId: productId,
-      quantity: 1,
+      quantity: quantity,
+      price: order.price,
       status: order.status,
       orderId: order._id,
       createdAt: order.createdAt,
       updatedAt: order.updatedAt
     };
 
+    await publish("order.created", response, { messageId: `order:${response.orderId}` });
     return __._success({ code: http_codes.created, message: messages.orderCreated, data: response, res });
   } catch (err) {
     console.log(err);
@@ -53,7 +59,7 @@ const myOrderList = async (req, res) => {
       return __._error({ code: http_codes.badRequest, message: messages.userIdRequired, res });
     }
     let wh = { userId: new mongoose.Types.ObjectId(userId) };
-    console.log(wh);
+
     const agg = [
       {
         $match: wh

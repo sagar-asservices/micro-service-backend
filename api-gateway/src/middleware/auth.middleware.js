@@ -17,6 +17,7 @@ const authUser = async (req, res, next) => {
         const response = await axios.get(`http://user_service:5001/api/v1/verifyuser?userId=${payload.userId}`);
         if (response.data.isUserExist === false) return _error({ code: 401, message: "Invalid User", res });
       } catch (err) {
+        console.log(err);
         return _error({
           code: 500,
           message: "User-service unavailable",
@@ -35,6 +36,7 @@ const authUser = async (req, res, next) => {
     }
     next();
   } catch (err) {
+    console.log(err);
     return _error({
       code: 500,
       message: "Internal Server Error",
