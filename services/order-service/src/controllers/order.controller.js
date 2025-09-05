@@ -8,7 +8,7 @@ const createOrder = async (req, res) => {
     const userId = req.userId;
     const { productId, quantity, price } = req.body;
 
-    const required = ["userId", "productId", "quantity"];
+    const required = ["productId", "quantity"];
     const validate = __._checkFields(req.body, required);
     if (validate !== true) throw new Error(validate.message);
 

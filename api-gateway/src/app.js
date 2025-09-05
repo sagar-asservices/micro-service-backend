@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
-import cookieParser from "cookie-parser";
 import compression from "compression";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import authUser from "./middleware/auth.middleware.js";
