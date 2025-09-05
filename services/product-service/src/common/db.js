@@ -10,9 +10,9 @@ const connectDB = async () => {
     };
 
     await mongoose.connect(process.env.MONGO_URI, options);
-    console.log("Connected to PRODUCT database");
+    console.log("📊✅ Connected to PRODUCT database");
   } catch (error) {
-    console.error("Error while connecting to db", error);
+    console.error("📊❌ Error while connecting to db", error);
   }
 };
 

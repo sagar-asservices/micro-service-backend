@@ -69,8 +69,8 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, (err) => {
   if (err) {
-    console.log("Error while start server");
+    console.log("❌ Error while start server");
     return;
   }
-  console.log(`Server running on : http://localhost:${PORT}`);
+  console.log(`✅ Server running on : http://localhost:${PORT}`);
 });
